@@ -62,7 +62,7 @@ def dic_comp(regime):
         Volatile_organics=6.02e-4
         Water_ice=5.55e-3
 
-    organics=Refractory_organics+Volatile_organics
+    organics=Volatile_organics#+Refractory_organics
 
     total = olivine+iron+pyroxene+Troilite+organics+Water_ice
     olivine = olivine/total
@@ -96,7 +96,7 @@ def dic_comp(regime):
         rho_Refractory_organics= 1.5
         rho_Volatile_organics= 1.
         rho_Water_ice= 0.92
-    rho_organics= Volatile_organics*rho_Volatile_organics+rho_Refractory_organics*Refractory_organics
+    rho_organics= Volatile_organics*rho_Volatile_organics#+rho_Refractory_organics*Refractory_organics
 
     rho_tot = rho_olivine*olivine+ rho_iron*iron + rho_pyroxene*pyroxene+rho_Troilite*Troilite+rho_organics*organics+rho_Water_ice*Water_ice
     dictcomp ={}
