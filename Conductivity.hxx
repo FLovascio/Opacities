@@ -24,7 +24,7 @@ namespace conductivities{
 
         std::complex<T> BrugemannSum(int lambda_k_i, std::complex<T> sigma_eff){
             std::complex<T> sum_value(0.0, 0.0);
-            int n = delta_ij[lambda_k_i].size();
+            int n = delta_i.size();
             T n_minus_1 = n - 1.0;
             for (int i = 0; i < n; ++i){
                 sum_value += delta_i[i] * (sigma_ij[lambda_k_i][i] - sigma_eff) / (sigma_ij[lambda_k_i][i] + (n_minus_1 * sigma_eff));
@@ -41,13 +41,14 @@ namespace conductivities{
             }
             return sum_value;
         }
-
-        void solveSystem(){
-            std::complex<T> current_best_guess(1.0, 1.0);
-            for (int i = 0; i < lambda_k.size(); ++i){
-                sigma_eff_j[i] = complexRootFind::solve(current_best_guess, BrugemannSum, BrugemannSumDerivative, lambda_k[i], 1e-8);
-                current_best_guess = sigma_eff_j[i];
-            }
-        }
     };
+    
+    template<class T>
+    void solveSystem(mixedGrain<T> & grain){
+        std::complex<T> current_best_guess(1.0, 1.0);
+        for (int i = 0; i < grain.lambda_k.size(); ++i){
+            grain.sigma_eff_j[i] = complexRootFind::solve(current_best_guess, grain.BrugemannSum, grain.BrugemannSumDerivative, grain.lambda_k[i], 1e-8);
+            current_best_guess = grain.sigma_eff_j[i];
+        }
+    }
 };
