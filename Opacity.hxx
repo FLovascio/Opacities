@@ -19,7 +19,7 @@ public:
 
   dustDistribution(T &smin, T &smax, T &rhograin, T &nbin)
 };
-} // namespace dust
+}; // namespace dust
 
 namespace opacity {
 template <class T> class opacity {
@@ -27,6 +27,8 @@ template <class T> class opacity {
   dust::dustDistribution<T> dustDist;
   conductivity::mixedGrain<T> grainCond;
   std::vector<T> opacity;
+
+
 
   T Kappa_j(int i, T &H) {
     T Kappa = 0.333333333 * dustDist.dustSizeDensity[i] * H *
@@ -51,4 +53,4 @@ template <class T> T e1(std::complex<T> &n) {
 }
 
 template <class T> T e2(std::complex<T> &n) { return 2.0 * n.real * n.imag; }
-} // namespace opacity
+}; // namespace opacity
