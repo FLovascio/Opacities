@@ -8,6 +8,7 @@
 #include <tuple>
 #include <complex>
 #include <iostream>
+#include "Conductivity.hxx"
 
 namespace complexRootFind{
     template <class T, class... argType>
