@@ -58,24 +58,29 @@ template <class T> void KappaDust_fast(std::vector<T> & output, conductivity::mi
 #endif 
   T fillValue =(T)0.0;
   std::fill(std::begin(output), std::end(output), fillValue);
-  T e1=0.0;
-  T e2=0.0;
-  T sigma_jk=0.0;
-  T xj=0.0;
-  T H=0.0;
+  T lambda=0.0;
+  T e1Var=0.0;
+  T e2Var=0.0;
+  T sigma=0.0;
+  T xVar=0.0;
+  T HVar=0.0;
   for(int k= 0; k<grain.lambda_k.size();++k){
-    T lambda=grain.lambda_k[k];
+    lambda=grain.lambda_k[k];
+    e1Var=e1(grain.sigma_eff_j[k]);
+    e2Var=e2(grain.sigma_eff_j[k]);
+    sigma=sigma_jk(lambda, e1Var, e2Var, 0.3333333333333333);
+    xVar=xj(sigma,lambda);
+    HVar=H_j(xVar,e1Var,e2Var);
     for(int idust=0; idust<dustDist.nbin; ++idust){
-      e1=0.0;
-      e2=0.0;
-      sigma_jk=0.0;
-      xj=0.0;
-      H=0.0;
-      output[k]+=Kappa_j(idust,H,dustDist);
+      output[k]+=Kappa_j(idust,HVar,dustDist);
     }
   }
 
 }
+template <class T> T xj(T lambda, T sigma){
+  return 2.0*M_PI/lambda*(0.3333333333333333*sigma+0.6666666666666666*sigma);
+}
+
 template <class T> T sigma_jk(T & lambdak, T & e1, T & e2, T & ljk) {
   return 2.0 * M_PI * e2 /
          ((lambdak * ljk * ljk) *
