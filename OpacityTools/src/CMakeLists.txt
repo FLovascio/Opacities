@@ -1,3 +1,3 @@
 #compile the project as a standalone application
-add_executable(opacity main.cxx Conductivity.hxx FileIO.hxx Opacity.hxx roots.hxx)
-target_compile_features(opacity PRIVATE cxx_std_17)
+add_executable(OpacityTests CodeTests.cxx Conductivity.hxx FileIO.hxx Opacity.hxx roots.hxx)
+#add_library(OpacityTools Conductivity.hxx FileIO.hxx Opacity.hxx roots.hxx)

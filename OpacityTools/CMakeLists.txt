@@ -1,9 +1,12 @@
-#support for apple silicon is mandated
-cmake_minimum_required(VERSION 3.19) 
+cmake_minimum_required(VERSION 3.20.0)
+project(OpacityTools VERSION 0.1.0)
 
-# set the project name and version
-project(OpacityTools VERSION 0.1)
+include(CTest)
+enable_testing()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 add_subdirectory(src)
