@@ -72,5 +72,20 @@ int main() {
   conductivity::solveSystem<double>(testGrain);
   std::cout << "lambda[0],sigma_eff_j[0]=" << testGrain.lambda_k[0] << ","
             << testGrain.sigma_eff_j[0] << "\n";
+  
+  // testing binary file output //
+  if(binaryFiles::writeComplexVectorToBinary<double>(testGrain.sigma_eff_j,"EffectiveConductivities.bin")){
+    std::cout << "complex write successfull \n";
+  };
+  if(binaryFiles::writeRealVectorToBinary<double>(testGrain.lambda_k,"Lambda.bin")){
+    std::cout << "real write successfull \n";
+  };
+
+  // testing opacity calculation //
+  dust::dustDistribution<double> testDistribution(2.5e-7,5e-4,1.0,500,0.013986,dust::MRN_Pollack<double>);
+  std::vector<double> KDust=opacity::KappaDust<double>(testGrain,testDistribution);
+  if(binaryFiles::writeRealVectorToBinary<double>(KDust,"KDust.bin")){
+    std::cout << "K-Dust write successfull \n";
+  };
   return 0;
 }

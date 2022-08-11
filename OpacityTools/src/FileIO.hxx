@@ -106,7 +106,7 @@ bool writeComplexVectorToBinary(std::vector<std::complex<T>> data,
                                 std::string filename) {
   std::ofstream fout(filename, std::ios::out | std::ios::binary);
   if (!data.empty()) {
-    fout.write(&data[0], data.size() * sizeof(std::complex<T>));
+    fout.write((char*)&data[0], data.size() * sizeof(std::complex<T>));
     return true;
   }
   return false;
@@ -115,7 +115,7 @@ template <class T>
 bool writeRealVectorToBinary(std::vector<T> data, std::string filename) {
   std::ofstream fout(filename, std::ios::out | std::ios::binary);
   if (!data.empty()) {
-    fout.write(&data[0], data.size() * sizeof(T));
+    fout.write((char*)&data[0], data.size() * sizeof(T));
     return true;
   }
   return false;
