@@ -76,10 +76,9 @@ bool writeComplexVectorToFile(std::vector<std::complex<T>> &inputVector,
     std::cerr << "Could not open the file - '" << filename << "'\n";
     return false;
   }
-  int i = 0;
-  while (output_file >> (string(inputVector[i].real()) + " " +
-                         string(inputVector[i].imag()) + "\n")) {
-    i++;
+  for(int i=0; i <inputVector.size(); ++i){
+    output_file << (std::to_string(inputVector[i].real()) + " " +
+                         std::to_string(inputVector[i].imag()) + "\n");
   }
   output_file.close();
   return true;
@@ -92,8 +91,8 @@ bool writeRealVectorToFile(std::vector<T> &inputVector, std::string filename) {
     return false;
   }
   int i = 0;
-  while (output_file >> (string(inputVector[i]) + "\n")) {
-    i++;
+  for(int i=0; i <inputVector.size(); ++i){
+    output_file << std::to_string(inputVector[i]) + "\n";
   }
   output_file.close();
   return true;

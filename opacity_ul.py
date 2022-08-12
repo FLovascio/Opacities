@@ -1,10 +1,10 @@
 import functions_op as fop
 import matplotlib.pyplot as plt
 from scipy import optimize
-import autograd.numpy as np
+import numpy as np
 import scipy as sp
 import mpmath as mpm
-import autograd as ag
+#import autograd as ag
 
 
 # To make the dust grid
@@ -137,3 +137,9 @@ plt.figure()
 plt.loglog(nusem,Kappasem)
 plt.loglog(nu,Kappadust)
 plt.show()
+
+with open('reference_data.csv','w') as f:
+    np.savetxt(f, np.array(list(zip(nu,Kappadust))), delimiter=',', fmt='%f')
+
+with open('reference_data_nu.csv','w') as f: 
+    np.savetxt(f, n_mixture.view(float))

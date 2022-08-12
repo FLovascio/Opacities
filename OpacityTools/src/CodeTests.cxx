@@ -74,11 +74,21 @@ int main() {
             << testGrain.sigma_eff_j[0] << "\n";
   
   // testing binary file output //
+  std::cout<<"length of array is "<<testGrain.sigma_eff_j.size()<<"\n";
+  std::cout<<testGrain.sigma_eff_j[0].real()<<","<<testGrain.sigma_eff_j[0].imag()<<"\n";
+  std::cout<<testGrain.sigma_eff_j[1].real()<<","<<testGrain.sigma_eff_j[1].imag()<<"\n";
+  std::cout<<testGrain.sigma_eff_j[2].real()<<","<<testGrain.sigma_eff_j[2].imag()<<"\n";
   if(binaryFiles::writeComplexVectorToBinary<double>(testGrain.sigma_eff_j,"EffectiveConductivities.bin")){
     std::cout << "complex write successfull \n";
   };
   if(binaryFiles::writeRealVectorToBinary<double>(testGrain.lambda_k,"Lambda.bin")){
     std::cout << "real write successfull \n";
+  };
+  if(delimitedFiles::writeComplexVectorToFile<double>(testGrain.sigma_eff_j,"EffectiveConductivities.csv")){
+    std::cout << "complex file write successfull \n";
+  };
+  if(delimitedFiles::writeRealVectorToFile<double>(testGrain.lambda_k,"Lambda.csv")){
+    std::cout << "real file write successfull \n";
   };
 
   // testing opacity calculation //
