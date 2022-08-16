@@ -63,7 +63,7 @@ int main() {
   }
   // conductivity solver tests//
   conductivity::mixedGrain<double> testGrain(conductivity::readGrain<double>(
-      "/Users/fra/Code/Opacity/new_cons/Normal_silicates/"));
+      "/Users/fra/Code/Opacity/new_cons/Normal_silicates/",1.0));
   std::cout << "read grain ok!\n";
   std::cout << "testGrain delta_i[0]=" << testGrain.delta_i[0] << "\n";
   std::cout << "lambda[0],sigma_ij[0][0]=" << testGrain.lambda_k[0] << ","
@@ -97,5 +97,8 @@ int main() {
   if(binaryFiles::writeRealVectorToBinary<double>(KDust,"KDust.bin")){
     std::cout << "K-Dust write successfull \n";
   };
+  if(delimitedFiles::writeRealVectorToFile<double>(KDust,"KDust.csv")){
+    std::cout << "real file write successfull \n";
+  }; 
   return 0;
 }

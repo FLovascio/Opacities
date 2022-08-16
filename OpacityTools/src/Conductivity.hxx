@@ -59,7 +59,7 @@ std::complex<T> BrugemannSumDerivativeFunction(std::complex<T> sigma_eff,
   return sum_value;
 }
 
-template <class T> mixedGrain<T> readGrain(std::string dir) {
+template <class T> mixedGrain<T> readGrain(std::string dir,T unit_conversion=1e-4) {
   std::vector<std::vector<std::complex<T>>> materialProperties;
   std::vector<std::string> materials={"iron","olivine","orthopyroxene","volatile_organics","water_ice"};
   T totalcon=1.26e-4+2.64e-3+7.70e-4+6.02e-4+5.55e-3;
@@ -72,6 +72,9 @@ template <class T> mixedGrain<T> readGrain(std::string dir) {
     materialProperties.push_back(condV);
   }
   delimitedFiles::readDatToVector<T>(lambdas,dir+"n_"+materials[0]+".dat");
+  for(int i=0;i<lambdas.size();++i){
+    lambdas[i]=lambdas[i]*unit_conversion;
+  }
   mixedGrain<T> returnGrain(materialProperties,concentrations,lambdas);
   return returnGrain;
 }
