@@ -143,3 +143,9 @@ with open('reference_data.csv','w') as f:
 
 with open('reference_data_nu.csv','w') as f: 
     np.savetxt(f, n_mixture.view(float))
+
+with open('reference_data_dust.csv','w') as f: 
+    np.savetxt(f, epsilondust)
+
+with open('reference_data_dust_s.csv','w') as f: 
+    np.savetxt(f, sdust)

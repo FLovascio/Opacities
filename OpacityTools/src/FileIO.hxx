@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <complex>
+#include <sstream>
 //namespace Parser { // required for faster file io  with delimited files, will
 //                   // implement
 //template <class T, int realVal, int imagVal>
@@ -69,6 +70,32 @@ bool readDatToVector(std::vector<T> &outputVector, std::string filename) {
   return true;
 }
 template <class T>
+bool readColumnToVector(std::vector<T> &outputVector, std::string filename) {
+  int number_of_lines = 0;
+  std::string line;
+  std::ifstream countfile(filename);
+  while (std::getline(countfile, line)){
+      ++number_of_lines;
+  }
+  countfile.close();
+  std::ifstream input_file(filename);
+  if (!input_file.is_open()) {
+    std::cerr << "Could not open the file - '" << filename << "'\n";
+    return false;
+  }
+  if(number_of_lines!=outputVector.size()){
+    outputVector.resize(number_of_lines);
+  }
+  T number;
+  int i = 0;
+  while (input_file >> number) {
+    outputVector[i] = number;
+    i++;
+  }
+  input_file.close();
+  return true;
+}
+template <class T>
 bool writeComplexVectorToFile(std::vector<std::complex<T>> &inputVector,
                               std::string filename) {
   std::ofstream output_file(filename);
@@ -92,7 +119,9 @@ bool writeRealVectorToFile(std::vector<T> &inputVector, std::string filename) {
   }
   int i = 0;
   for(int i=0; i <inputVector.size(); ++i){
-    output_file << std::to_string(inputVector[i]) + "\n";
+    std::ostringstream s;
+    s<<inputVector[i];
+    output_file << s.str() + "\n";
   }
   output_file.close();
   return true;

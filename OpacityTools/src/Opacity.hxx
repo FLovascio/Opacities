@@ -6,6 +6,7 @@
 #include <complex>
 #include <functional>
 #include <vector>
+#include "FileIO.hxx"
 
 namespace dust {
 template <class T> class dustDistribution {
@@ -23,6 +24,12 @@ public:
       : smin(sMin), smax(sMax), nbin(nBin), rhograin(rhoGrain), epsilon(Epsilon) {
     dustSizeBins = makeSizeBins(smin, smax, nbin);
     dustSizeDensity = makeSizeDensity(dustSizeFunction);
+  };
+  dustDistribution(std::string sFile, std::string epsFile){
+    if(delimitedFiles::readColumnToVector<double>(dustSizeBins,sFile)){}
+    if(delimitedFiles::readColumnToVector<double>(dustSizeDensity,epsFile)){}
+    smin=dustSizeBins[0];
+    smax=dustSizeBins[dustSizeBins.size()];
   };
   std::vector<T> makeSizeBins(T &smin, T &smax, int &nbin) {
     std::vector<T> retVec(nbin, 0.0);
@@ -44,20 +51,21 @@ public:
 template <class T>
 std::function<T(T)> MRN_Pollack = [](T r) {
   T P0=0.005e-4;
+  T r3=r*r*r;
+  T retVal=0.0;
   if(r>=5e-4){
-    return 0.0;
+    retVal = 0.0;
   }
-  else{
-    if(r>=1e-4){
-      return (pow(1.0/P0,2.0)*pow(1.0/r,5.5));
-    }
-    else{
-      if(r>=P0){
-        return pow(P0/r,3.5);
-      }
-      else{return 1.0;}
-    }
+  if(r>=1e-4){
+    retVal = (pow(1.0/P0,2.0)*pow(P0/r,5.5));
   }
+  if(r>=P0){
+    retVal = pow(P0/r,3.5);
+  }
+  if(r<P0){
+    retVal = 1.0;
+  }
+  return retVal*r3;
 };
 
 }; // namespace dust
