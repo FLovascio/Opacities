@@ -30,6 +30,8 @@ public:
     if(delimitedFiles::readColumnToVector<double>(dustSizeDensity,epsFile)){}
     smin=dustSizeBins[0];
     smax=dustSizeBins[dustSizeBins.size()];
+    nbin=dustSizeBins.size();
+    rhograin=3.0;
   };
   std::vector<T> makeSizeBins(T &smin, T &smax, int &nbin) {
     std::vector<T> retVec(nbin, 0.0);
@@ -91,10 +93,115 @@ template <class T> T e1(std::complex<T> &n) {
 
 template <class T> T e2(std::complex<T> &n) { return 2.0 * n.real() * n.imag(); }
 
-template <class T> T Kappa_j(int i, T &H, dust::dustDistribution<T> &dustDist) {
+template <class T> T Kappa_j(int i, T &H, dust::dustDistribution<T> &dustDist, T sigma) {
   T Kappa = dustDist.dustSizeDensity[i] * H *
-            dustDist.dustSizeBins[i] / dustDist.rhograin;
+            sigma / dustDist.rhograin;
   return Kappa;
+}
+
+template <class T> std::vector<T> calculateHj(conductivity::mixedGrain<T> &grain){
+  T fillValue = (T)0.0;
+  T lambda = 0.0;
+  T e1Var = 0.0;
+  T e2Var = 0.0;
+  T sigma = 0.0;
+  T xVar = 0.0;
+  T HVar = 0.0;
+  std::vector<T> output(grain.lambda_k.size(),fillValue);
+  for (int k = 0; k < grain.lambda_k.size(); ++k) {
+    lambda = grain.lambda_k[k];
+    e1Var = e1(grain.sigma_eff_j[k]);
+    e2Var = e2(grain.sigma_eff_j[k]);
+    sigma = sigma_jk(lambda, e1Var, e2Var, 0.3333333333333333);
+    xVar = xj(sigma, lambda);
+    HVar = H_j(xVar, e1Var, e2Var);
+    output[k]=HVar;
+  }
+  return output;
+}
+
+template <class T> std::vector<T> calculateXj(conductivity::mixedGrain<T> &grain){
+  T fillValue = (T)0.0;
+  T lambda = 0.0;
+  T e1Var = 0.0;
+  T e2Var = 0.0;
+  T sigma = 0.0;
+  T xVar = 0.0;
+  T HVar = 0.0;
+  std::vector<T> output(grain.lambda_k.size(),fillValue);
+  for (int k = 0; k < grain.lambda_k.size(); ++k) {
+    lambda = grain.lambda_k[k];
+    e1Var = e1(grain.sigma_eff_j[k]);
+    e2Var = e2(grain.sigma_eff_j[k]);
+    sigma = sigma_jk(lambda, e1Var, e2Var, 0.3333333333333333);
+    xVar = xj(lambda, sigma);
+    HVar = H_j(xVar, e1Var, e2Var);
+    output[k]=xVar;
+  }
+  return output;
+}
+
+template <class T> std::vector<T> calculateSigma(conductivity::mixedGrain<T> &grain){
+  T fillValue = (T)0.0;
+  T lambda = 0.0;
+  T e1Var = 0.0;
+  T e2Var = 0.0;
+  T sigma = 0.0;
+  T xVar = 0.0;
+  T HVar = 0.0;
+  std::vector<T> output(grain.lambda_k.size(),fillValue);
+  for (int k = 0; k < grain.lambda_k.size(); ++k) {
+    lambda = grain.lambda_k[k];
+    e1Var = e1(grain.sigma_eff_j[k]);
+    e2Var = e2(grain.sigma_eff_j[k]);
+    sigma = sigma_jk(lambda, e1Var, e2Var, 0.3333333333333333);
+    xVar = xj(sigma, lambda);
+    HVar = H_j(xVar, e1Var, e2Var);
+    output[k]=sigma;
+  }
+  return output;
+}
+
+template <class T> std::vector<T> calculateE1(conductivity::mixedGrain<T> &grain){
+  T fillValue = (T)0.0;
+  T lambda = 0.0;
+  T e1Var = 0.0;
+  T e2Var = 0.0;
+  T sigma = 0.0;
+  T xVar = 0.0;
+  T HVar = 0.0;
+  std::vector<T> output(grain.lambda_k.size(),fillValue);
+  for (int k = 0; k < grain.lambda_k.size(); ++k) {
+    lambda = grain.lambda_k[k];
+    e1Var = e1(grain.sigma_eff_j[k]);
+    e2Var = e2(grain.sigma_eff_j[k]);
+    sigma = sigma_jk(lambda, e1Var, e2Var, 0.3333333333333333);
+    xVar = xj(sigma, lambda);
+    HVar = H_j(xVar, e1Var, e2Var);
+    output[k]=e1Var;
+  }
+  return output;
+}
+
+template <class T> std::vector<T> calculateE2(conductivity::mixedGrain<T> &grain){
+  T fillValue = (T)0.0;
+  T lambda = 0.0;
+  T e1Var = 0.0;
+  T e2Var = 0.0;
+  T sigma = 0.0;
+  T xVar = 0.0;
+  T HVar = 0.0;
+  std::vector<T> output(grain.lambda_k.size(),fillValue);
+  for (int k = 0; k < grain.lambda_k.size(); ++k) {
+    lambda = grain.lambda_k[k];
+    e1Var = e1(grain.sigma_eff_j[k]);
+    e2Var = e2(grain.sigma_eff_j[k]);
+    sigma = sigma_jk(lambda, e1Var, e2Var, 0.3333333333333333);
+    xVar = xj(sigma, lambda);
+    HVar = H_j(xVar, e1Var, e2Var);
+    output[k]=e2Var;
+  }
+  return output;
 }
 
 template <class T>
@@ -121,7 +228,9 @@ void KappaDust_fast(std::vector<T> &output, conductivity::mixedGrain<T> &grain,
     xVar = xj(sigma, lambda);
     HVar = H_j(xVar, e1Var, e2Var);
     for (int idust = 0; idust < dustDist.nbin; ++idust) {
-      output[k] += Kappa_j(idust, HVar, dustDist);
+      xVar = xj<T>(lambda,dustDist.dustSizeBins[idust]);
+      HVar = H_j<T>(xVar, e1Var, e2Var);
+      output[k] += Kappa_j(idust, HVar, dustDist, sigma);
     }
   }
 }
@@ -142,10 +251,12 @@ std::vector<T> KappaDust(std::vector<T> lambda_k, std::vector<std::complex<T>> s
     e1Var = e1<T>(sigma_eff_j[k]);
     e2Var = e2<T>(sigma_eff_j[k]);
     sigma = sigma_jk<T>(lambda, e1Var, e2Var, 0.3333333333333333);
-    xVar = xj<T>(sigma, lambda);
-    HVar = H_j<T>(xVar, e1Var, e2Var);
+    std::cout << lambda <<" " << e1Var << " " << e2Var << " " << sigma << " " << xVar << " " << HVar << "\n";
     for (int idust = 0; idust < dustDist.nbin; ++idust) {
-      output[k] += Kappa_j(idust, HVar, dustDist);
+      xVar = xj<T>(lambda,dustDist.dustSizeBins[idust]);
+      HVar = H_j<T>(xVar, e1Var, e2Var);
+      output[k] += Kappa_j(idust, HVar, dustDist, sigma);
+      //std::cout << output[k] <<"\n";
     }
   }
   return output;

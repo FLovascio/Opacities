@@ -149,3 +149,16 @@ with open('reference_data_dust.csv','w') as f:
 
 with open('reference_data_dust_s.csv','w') as f: 
     np.savetxt(f, sdust)
+
+HJV=fop.Hj(fop.xj(lambda_k,sdust[idust],sdust[idust]),ee1,ee2)
+XJV=fop.xj(lambda_k,sdust[idust],sdust[idust])
+with open('reference_data_Hj.csv','w') as f: 
+    np.savetxt(f,HJV)
+with open('reference_data_Xj.csv','w') as f: 
+    np.savetxt(f,XJV)
+with open('reference_data_e1.csv','w') as f: 
+    np.savetxt(f,ee1)
+with open('reference_data_e2.csv','w') as f: 
+    np.savetxt(f,ee2)
+with open('reference_data_sig.csv','w') as f: 
+    np.savetxt(f,sigma)
