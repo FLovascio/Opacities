@@ -146,7 +146,6 @@ std::vector<T> KappaDust(std::vector<T> lambda_k, std::vector<std::complex<T>> s
     e1Var = e1<T>(sigma_eff_j[k]);
     e2Var = e2<T>(sigma_eff_j[k]);
     sigma = sigma_jk<T>(lambda, e1Var, e2Var, 0.3333333333333333);
-    std::cout << lambda <<" " << e1Var << " " << e2Var << " " << sigma << " " << xVar << " " << HVar << "\n";
     for (int idust = 0; idust < dustDist.nbin; ++idust) {
       xVar = xj<T>(lambda,dustDist.dustSizeBins[idust]);
       HVar = H_j<T>(xVar, e1Var, e2Var);
