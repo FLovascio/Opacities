@@ -12,9 +12,9 @@ private:
   std::size_t memory_size;
 
 public:
-  typedef std::size_t size_type;
-  typedef T *pointer;
-  typedef T value_type;
+  using size_type=std::size_t;
+  using pointer=T*;
+  using value_type=T;
 
   PreAllocator(T *memory_ptr, std::size_t memory_size)
       : memory_ptr(memory_ptr), memory_size(memory_size) {}
