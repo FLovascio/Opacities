@@ -35,7 +35,7 @@ plt.legend()
 plt.show()
 
 
-plt.figure()
+plt.figure() 
 plt.title(r"Im($\nu$) comparison")
 plt.xlabel(r"$\lambda$")
 plt.ylabel(r"Im($\nu$)")

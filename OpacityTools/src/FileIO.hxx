@@ -6,6 +6,7 @@
 #include <string>
 #include <complex>
 #include <sstream>
+#include <vector>
 //namespace Parser { // required for faster file io  with delimited files, will
 //                   // implement
 //template <class T, int realVal, int imagVal>
