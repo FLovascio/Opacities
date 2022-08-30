@@ -1,3 +1,4 @@
+#pragma once
 #include "conductivity_interfaces.h"
 
 extern "C"{

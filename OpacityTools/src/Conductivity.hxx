@@ -1,20 +1,21 @@
 #pragma once
 
-#include "FileIO.hxx"
-#include "roots.hxx"
 #include <cmath>
 #include <complex>
 #include <functional>
 #include <vector>
+#include <memory>
 #include "allocators.hxx"
+#include "FileIO.hxx"
+#include "roots.hxx"
 
 namespace conductivity {
-template <class T> class mixedGrain {
+template <class T,template<class> class AllocatorType=std::allocator> class mixedGrain {
 public:
-  std::vector<std::vector<std::complex<T>>> sigma_ij;
-  std::vector<T> delta_i;
-  std::vector<T> lambda_k;
-  std::vector<std::complex<T>> sigma_eff_j;
+  std::vector<std::vector<std::complex<T>,AllocatorType<std::complex<T>>>> sigma_ij;
+  std::vector<T,AllocatorType<T>> delta_i;
+  std::vector<T,AllocatorType<T>> lambda_k;
+  std::vector<std::complex<T>,AllocatorType<std::complex<T>>> sigma_eff_j;
 
   mixedGrain(std::vector<std::vector<std::complex<T>>> sigma_ij_input,
              std::vector<T> delta_i_input, std::vector<T> lambda_k_input) {
@@ -24,13 +25,7 @@ public:
     sigma_eff_j = sigma_ij[0];
   }
 
-  mixedGrain(std::vector<std::vector<std::complex<T>>> &sigma_ij_input,
-             std::vector<T> &delta_i_input, std::vector<T> &lambda_k_input,
-             std::vector<std::complex<T>> &sigma_j_eff_input) {
-    //implement object allocator here
-  }
-
-  mixedGrain(const mixedGrain<T> &a) {
+  mixedGrain(const mixedGrain<T,AllocatorType> &a) {
     sigma_ij = a.sigma_ij;
     delta_i = a.delta_i;
     lambda_k = a.lambda_k;
