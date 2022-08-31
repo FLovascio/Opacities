@@ -150,3 +150,37 @@ bool writeRealVectorToBinary(std::vector<T> data, std::string filename) {
   return false;
 }
 }; // namespace binaryFiles
+namespace setupFiles{
+template <class T>
+bool readMaterialsFile(std::vector<std::string> & materialNames, std::vector<T> & abbundances, std::string dir){
+  int number_of_lines = 0;
+  std::string line;
+  std::string filename=dir+"material_abundancies.dat";
+  std::ifstream countfile(filename);
+  while (std::getline(countfile, line)){
+      ++number_of_lines;
+  }
+  countfile.close();
+  std::ifstream input_file(filename);
+  if (!input_file.is_open()) {
+    std::cerr << "Could not open the file - '" << filename << "'\n";
+    return false;
+  }
+  if(number_of_lines!=materialNames.size()){
+    materialNames.resize(number_of_lines);
+  }
+  if(number_of_lines!=abbundances.size()){
+    abbundances.resize(number_of_lines);
+  }
+  T abbundance;
+  std::string Name;
+  int i = 0;
+  while (input_file >> Name >> abbundance) {
+    materialNames[i]=Name;
+    abbundances[i]=abbundance;
+    i++;
+  }
+  input_file.close();
+  return true; 
+}
+}// namspace setupFiles
